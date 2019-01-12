@@ -6,7 +6,7 @@ then
     exit 1
 fi
 
-mkdir -p "${INSTALL_DIR}"
+mkdir -p "$1"
 INSTALL_DIR="$(cd \"$1\" && pwd)"
 
 REPO_DIR="$(dirname \"$0\")"
