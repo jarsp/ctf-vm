@@ -8,7 +8,10 @@ fi
 
 INSTALL_DIR="$1"
 
+REPO_DIR="$(dirname \"$0\")"
+cd "${REPO_DIR}"
 REPO_DIR="$(pwd)"
+
 REPO_CONFIG_DIR="${REPO_DIR}/configs"
 
 VENV_DIR="${INSTALL_DIR}/venvs"
