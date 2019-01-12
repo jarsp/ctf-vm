@@ -1,0 +1,62 @@
+call plug#begin('/home/__USER__/.config/nvim/plugged')
+Plug 'easymotion/vim-easymotion'
+call plug#end()
+
+syntax on
+set tabstop=4
+set softtabstop=0
+set expandtab
+set shiftwidth=4
+set foldmethod=manual
+set number
+
+" Easymotion
+function! s:incsearch_config(...) abort
+  return incsearch#util#deepextend(deepcopy({
+  \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+  \   'keymap': {
+  \     "\<CR>": '<Over>(easymotion)'
+  \   },
+  \   'is_expr': 0
+  \ }), get(a:, 1, {}))
+endfunction
+
+function! s:config_easyfuzzymotion(...) abort
+  return extend(copy({
+  \   'converters': [incsearch#config#fuzzyword#converter()],
+  \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+  \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+  \   'is_expr': 0,
+  \   'is_stay': 1
+  \ }), get(a:, 1, {}))
+endfunction
+
+" Keybindings
+let mapleader=' '
+inoremap jk <Esc>
+
+noremap bn <Esc>:bp<CR>
+noremap bm <Esc>:bn<CR>
+
+nnoremap <Esc> <Esc>:noh<CR>
+
+noremap <leader>sh <Esc>:abo vsp<CR>
+noremap <leader>sj <Esc>:bel sp<CR>
+noremap <leader>sk <Esc>:sp<CR>
+noremap <leader>sl <Esc>:vsp<CR>
+
+noremap <leader>wf <Esc>:tabf 
+noremap <leader>we <Esc>:tabnew<CR>
+noremap <leader>wh <Esc>:tabp<CR>
+noremap <leader>wl <Esc>:tabn<CR>
+
+set splitright
+set title
+set noequalalways
+
+" Scripts
+
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
