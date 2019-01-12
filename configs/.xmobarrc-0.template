@@ -1,0 +1,34 @@
+Config { font = "xft:DejaVu Sans Mono Regular:size=9:antialias=false"
+       , bgColor = "black"
+       , fgColor = "grey"
+       , position = Bottom
+       , allDesktops = True
+       , pickBroadest = False
+       , persistent = True
+       , commands = [ Run Battery        [ "--template" , "B: <acstatus>"
+                                         , "--Low"      , "20"        -- units: %
+                                         , "--High"     , "70"        -- units: %
+                                         , "--low"      , "red"
+                                         , "--normal"   , "orange"
+                                         , "--high"     , "green"
+
+                                         , "--" -- battery specific options
+                                                -- discharging status
+                                         , "-o"	, "<left>% (<timeleft>)"
+                                                -- AC "on" status
+                                         , "-O"	, "<fc=orange>Charging</fc>"
+                                                -- charged status
+                                         , "-i"	, "<fc=green>Charged</fc>"
+                                         ] 50
+                    , Run MultiCpu ["-t","C: <total0> <total1>","-L","30","-H","60","-h","red","-l","green","-n","orange","-w","3"] 1
+                    , Run Memory ["-t","M/S%: <usedratio>","-H","8192","-L","4096","-h","red","-l","green","-n","yellow"] 10
+                    , Run Swap ["-t","<usedratio>","-H","1024","-L","512","-h","red","-l","green","-n","yellow"] 10
+                    , Run DynNetwork ["-t","<dev>:↓ <rx>, ↑ <tx> kbps","-H","5000","-L","1000","-h","red","-l","green","-n","yellow"] 10
+                    , Run DiskU [("/", "<used>/<size>")] 
+                                ["-L", "20", "-H", "50", "-m", "1", "-p", "3", "--normal", "grey50", "--high", "#cc22b0", "--low", "#2f4f4f"] 20
+                    , Run StdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% } ⟦%dynnetwork%⟧  ⟦%battery%⟧ { ⟦%multicpu%⟧  ⟦%memory%/%swap%⟧  ⟦%disku%⟧  <fc=#FFFFCC>%date%</fc>"
+       }

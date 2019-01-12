@@ -34,14 +34,14 @@ for f in $(ls -a "${REPO_CONFIG_DIR}")
 do
     if [ "$f" != "." -a "$f" != ".." ]
     then
-        sed -e "s&__INSTALL__DIR__&${INSTALL_DIR}&g" "${REPO_CONFIG_DIR}/$f" | \
-        sed -e "s&__REPO__DIR__&${REPO_DIR}&g" | \
-        sed -e "s&__REPO_CONFIG_DIR__&${REPO_CONFIG_DIR}&g" | \
-        sed -e "s&__VENV_DIR__&${VENV_DIR}&g" | \
-        sed -e "s&__CLONE_DIR__&${CLONE_DIR}&g" | \
-        sed -e "s&__SCRIPTS_DIR__&${SCRIPTS_DIR}&g" | \
-        sed -e "s&__DEFAULT_VENV__&${DEFAULT_VENV}&g" | \
-        sed -e "s&__USER__&${USER}&g" > "${REPO_CONFIG_DIR}/${f%.*}"
+        sed -e "s&__INSTALL__DIR__&${INSTALL_DIR}&g" \
+            -e "s&__REPO__DIR__&${REPO_DIR}&g" \
+            -e "s&__REPO_CONFIG_DIR__&${REPO_CONFIG_DIR}&g" \
+            -e "s&__VENV_DIR__&${VENV_DIR}&g" \
+            -e "s&__CLONE_DIR__&${CLONE_DIR}&g" \
+            -e "s&__SCRIPTS_DIR__&${SCRIPTS_DIR}&g" \
+            -e "s&__DEFAULT_VENV__&${DEFAULT_VENV}&g" \
+            -e "s&__USER__&${USER}&g" "${REPO_CONFIG_DIR}/$f" > "${REPO_CONFIG_DIR}/${f%.*}"
         CLEANUP_ARRAY+="${REPO_CONFIG_DIR}/${f%.*}"
     fi
 done
@@ -82,6 +82,10 @@ sudo apt-get install -y \
     sagemath \
     software-properties-common \
     virtualenv
+
+# Disable postfix lol
+sudo service postfix stop
+sudo systemctl disable postfix
 
 # Docker PPA
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -163,8 +167,20 @@ cp ${REPO_CONFIG_DIR}/.radare2rc ~/.radare2rc
 sudo add-apt-repository -y ppa:neovim-ppa/stable
 sudo apt-get update
 sudo apt-get install -y \
+    dmenu \
+    feh \
+    ghc \
+    libx11-dev \
+    libghc-xmonad-dev \
+    libghc-xmonad-contrib-dev \
     neovim \
+    xcompmgr \
+    xmobar \
+    xmonad \
     zsh
+
+# Antigen
+curl -L git.io/antigen > ~/.config/antigen.zsh
 
 # fasd
 cd "${REPO_DIR}"
@@ -177,32 +193,47 @@ cd "${REPO_DIR}"
 git clone https://github.com/junegunn/fzf
 ./fzf/install --key-bindings --completion --update-rc
 
-# vim-plug
+# Oh-my-zsh
+sudo chsh -s "$(which zsh)" "${USER}"
+rm ~/.zshrc # annoying
+
+sh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sed '/\s*env\s\s*zsh\s*/d' | sed "s/chsh -s/#chsh -s/")
+
+# st
+cd "${REPO_DIR}"
+git clone https://github.com/LukeSmithxyz/st
+cd st
+sed -i \
+    -e "s/unsigned int alpha = 0xed/unsigned int alpha = 0x80/g" \
+    -e "s/282828/000000/g" config.h
+sudo make install
+sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/st 60
+
+# Vim-plug
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 
 ###### PERSONAL CONFIGS ######
 
+# Bg for feh
+cp "${REPO_DIR}/nu_composite.png" "${INSTALL_DIR}/wallpaper.png"
+
 # Neovim config
 sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
-#sudo update-alternatives --config vi
 sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
-#sudo update-alternatives --config vim
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
-#sudo update-alternatives --config editor
 
 mkdir -p ~/.config/nvim
 cp "${REPO_CONFIG_DIR}/init.vim" ~/.config/nvim/init.vim
 vi -c ":PlugInstall | :qa!"
 
+# XMonad config
+mkdir "~/.xmonad"
+cp "${REPO_CONFIG_DIR}/.xmonad.hs" ~/.xmonad/xmonad.hs
+cp "${REPO_CONFIG_DIR}/.xmobarrc-*" ~/
+
 # Zsh config, oh-my-zsh, antigen
-sudo chsh -s $(which zsh)
-rm ~/.zshrc # annoying
-
-sh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sed '/\s*env\s\s*zsh\s*/d' | sed "s/chsh -s/#chsh -s/")
-
-curl -L git.io/antigen > ~/.config/antigen.zsh
 cp "${REPO_CONFIG_DIR}/.zshrc" ~/.zshrc
 
 
@@ -213,3 +244,6 @@ for f in "$CLEANUP_ARRAY[@]"
 do
     rm -f "$f"
 done
+
+echo "System is going for reboot in 1 minute!"
+sudo shutdown -r +1
