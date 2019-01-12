@@ -36,7 +36,7 @@ for f in $(ls -a "${REPO_CONFIG_DIR}")
 do
     if [ "$f" != "." -a "$f" != ".." ]
     then
-        sed -e "s&__INSTALL__DIR__&${INSTALL_DIR}&g" \
+        sed -e "s&__INSTALL_DIR__&${INSTALL_DIR}&g" \
             -e "s&__REPO__DIR__&${REPO_DIR}&g" \
             -e "s&__REPO_CONFIG_DIR__&${REPO_CONFIG_DIR}&g" \
             -e "s&__VENV_DIR__&${VENV_DIR}&g" \
