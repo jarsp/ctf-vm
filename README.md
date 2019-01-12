@@ -2,6 +2,9 @@
 
 Simple scripts for my ctf setup.
 
-Clone the repo and run with ./setup.sh INSTALL\_DIR to install into the given directory as the current user.
+Clone the repo and run with ./setup.sh INSTALL\_DIR inside the VMto install into the given directory as the current user.
 
-For Ubuntu VMs, probably 16.04 at least.
+An Ubuntu VM is required, probably 16.04 at least.
+
+Tested on:
+- 18.04
