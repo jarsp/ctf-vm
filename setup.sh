@@ -53,7 +53,7 @@ sudo dpkg --add-architecture i386
 
 # Install packages (if using an 'older' version of Ubuntu modify
 # Neovim packages accordingly https://github.com/neovim/neovim/wiki/Installing-Neovim)
-EXPORT DEBIAN_FRONTEND=noninteractive # for postfix, wtf sagemath
+export DEBIAN_FRONTEND=noninteractive # for postfix, wtf sagemath
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y \
