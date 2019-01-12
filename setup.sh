@@ -6,6 +6,7 @@ then
     exit 1
 fi
 
+mkdir -p "${INSTALL_DIR}"
 INSTALL_DIR="$(cd \"$1\" && pwd)"
 
 REPO_DIR="$(dirname \"$0\")"
@@ -25,8 +26,6 @@ USER="$(whoami)"
 CLEANUP_ARRAY=()
 
 # Setup
-cd "${REPO_DIR}"
-mkdir -p "${INSTALL_DIR}"
 cd "${INSTALL_DIR}"
 
 mkdir -p "${VENV_DIR}"
