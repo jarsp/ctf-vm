@@ -28,5 +28,5 @@ main = do
         , normalBorderColor = "darkgreen"
         }
   where myKeys (XConfig {modMask = modm}) = M.fromList $ [ ((modm, xK_x), sendMessage ToggleStruts)
-                                                         , ((modm .|. shiftMask, xK_Return), spawn "gnome-terminal")
+                                                         , ((modm .|. shiftMask, xK_Return), spawn "st")
                                                          ]
