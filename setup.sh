@@ -169,6 +169,7 @@ cp ${REPO_CONFIG_DIR}/.radare2rc ~/.radare2rc
 sudo add-apt-repository -y ppa:neovim-ppa/stable
 sudo apt-get update
 sudo apt-get install -y \
+    compton \
     dmenu \
     feh \
     ghc \
@@ -176,7 +177,6 @@ sudo apt-get install -y \
     libghc-xmonad-dev \
     libghc-xmonad-contrib-dev \
     neovim \
-    xcompmgr \
     xmobar \
     xmonad \
     zsh
@@ -231,8 +231,8 @@ cp "${REPO_CONFIG_DIR}/init.vim" ~/.config/nvim/init.vim
 vi -c ":PlugInstall | :qa!"
 
 # XMonad config
-mkdir "~/.xmonad"
-cp "${REPO_CONFIG_DIR}/.xmonad.hs" ~/.xmonad/xmonad.hs
+mkdir -p "~/.xmonad"
+cp "${REPO_CONFIG_DIR}/xmonad.hs" ~/.xmonad/xmonad.hs
 cp "${REPO_CONFIG_DIR}/.xmobarrc-*" ~/
 
 # Zsh config, oh-my-zsh, antigen
