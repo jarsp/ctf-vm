@@ -22,6 +22,7 @@ main = do
         , handleEventHook = handleEventHook defaultConfig <+> docksEventHook
         , logHook    = mapM_ (\handle -> dynamicLogWithPP $ xmobarPP { ppOutput = hPutStrLn handle , ppTitle  = xmobarColor "green" "" . shorten 50 }) xmprocs
         , modMask    = mod4Mask
+        , terminal   = "st"
         , keys = \c -> myKeys c `M.union` keys defaultConfig c
         , focusedBorderColor = "lightgreen"
         , normalBorderColor = "darkgreen"
