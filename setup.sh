@@ -6,11 +6,10 @@ then
     exit 1
 fi
 
-INSTALL_DIR="$(pwd)/$1"
+INSTALL_DIR="$(cd \"$1\" && pwd)"
 
 REPO_DIR="$(dirname \"$0\")"
-cd "${REPO_DIR}"
-REPO_DIR="$(pwd)"
+REPO_DIR="$(cd \"${REPO_DIR}\" && pwd)"
 
 REPO_CONFIG_DIR="${REPO_DIR}/configs"
 
@@ -26,6 +25,7 @@ USER="$(whoami)"
 CLEANUP_ARRAY=()
 
 # Setup
+cd "${REPO_DIR}"
 mkdir -p "${INSTALL_DIR}"
 cd "${INSTALL_DIR}"
 
