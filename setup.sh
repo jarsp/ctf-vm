@@ -91,11 +91,15 @@ sudo add-apt-repository -y \
    stable"
 
 # Wine PPA (necessary to avoid bugs with python installer in wine)
-curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-sudo apt-add-repository -y \
-    "deb https://dl.winehq.org/wine-builds/ubuntu/ \
-    $(lsb_release -cs) \
-    main"
+#curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+#sudo apt-add-repository -y \
+#    "deb https://dl.winehq.org/wine-builds/ubuntu/ \
+#    $(lsb_release -cs) \
+#    main"
+
+# Wine PPA is has some key problem so I hope this works lol
+sudo apt-get update
+sudo apt-get install wine-development
 
 # Install PPA stuff
 sudo apt-get update
@@ -104,7 +108,6 @@ sudo apt-get install -y \
 sudo apt-get install --install-recommends -y winehq-staging
 
 # RVM/Ruby install
-sudo apt-get update
 gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 curl -sSL https://get.rvm.io | bash -s stable --rails
 
