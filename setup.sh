@@ -51,9 +51,13 @@ done
 # Add arch
 sudo dpkg --add-architecture i386
 
+# For postfix, wtf sagemath
+export DEBIAN_FRONTEND=noninteractive
+sudo debconf-set-selections <<< "postfix postfix/mailname string ubuntu"
+sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+
 # Install packages (if using an 'older' version of Ubuntu modify
 # Neovim packages accordingly https://github.com/neovim/neovim/wiki/Installing-Neovim)
-export DEBIAN_FRONTEND=noninteractive # for postfix, wtf sagemath
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y \
