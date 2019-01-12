@@ -6,7 +6,7 @@ then
     exit 1
 fi
 
-INSTALL_DIR="$1"
+INSTALL_DIR="$(pwd)/$1"
 
 REPO_DIR="$(dirname \"$0\")"
 cd "${REPO_DIR}"
