@@ -9,8 +9,8 @@ fi
 mkdir -p "$1"
 INSTALL_DIR="$(cd \"$1\" && pwd)"
 
-REPO_DIR="$(dirname \"$0\")"
-REPO_DIR="$(cd \"${REPO_DIR}\" && pwd)"
+REPO_DIR="$(dirname $0)"
+REPO_DIR="$(cd ${REPO_DIR} && pwd)"
 
 REPO_CONFIG_DIR="${REPO_DIR}/configs"
 
