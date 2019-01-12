@@ -185,13 +185,13 @@ sudo apt-get install -y \
 curl -L git.io/antigen > ~/.config/antigen.zsh
 
 # fasd
-cd "${REPO_DIR}"
+cd "${CLONE_DIR}"
 git clone https://github.com/clvv/fasd
 cd fasd
 sudo make install
 
 # fzf
-cd "${REPO_DIR}"
+cd "${CLONE_DIR}"
 git clone https://github.com/junegunn/fzf
 ./fzf/install --key-bindings --completion --update-rc
 
@@ -202,7 +202,7 @@ rm ~/.zshrc # annoying
 sh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sed '/\s*env\s\s*zsh\s*/d' | sed "s/chsh -s/#chsh -s/")
 
 # st
-cd "${REPO_DIR}"
+cd "${CLONE_DIR}"
 git clone https://github.com/LukeSmithxyz/st
 cd st
 sed -i \
@@ -231,9 +231,10 @@ cp "${REPO_CONFIG_DIR}/init.vim" ~/.config/nvim/init.vim
 vi -c ":PlugInstall | :qa!"
 
 # XMonad config
-mkdir -p "~/.xmonad"
+mkdir -p ~/.xmonad
 cp "${REPO_CONFIG_DIR}/xmonad.hs" ~/.xmonad/xmonad.hs
-cp "${REPO_CONFIG_DIR}/.xmobarrc-*" ~/
+cp "${REPO_CONFIG_DIR}/.xmobarrc-0" ~/.xmobarrc-0
+cp "${REPO_CONFIG_DIR}/.xmobarrc-1" ~/.xmobarrc-1
 
 # Zsh config, oh-my-zsh, antigen
 cp "${REPO_CONFIG_DIR}/.zshrc" ~/.zshrc
