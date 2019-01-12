@@ -141,6 +141,14 @@ git clone https://github.com/scwuaptx/Pwngdb.git
 # Make pwndbg and pwngdb play nice
 cp "${REPO_CONFIG_DIR}/.gdbinit" ~/.gdbinit
 
+# radare2
+cd "${CLONE_DIR}"
+git clone https://github.com/radare/radare2
+cd radare2
+sys/install.sh
+
+# r2 config
+cp ${REPO_CONFIG_DIR}/.radare2rc ~/.radare2rc
 
 ###### PERSONAL PREFS ######
 
