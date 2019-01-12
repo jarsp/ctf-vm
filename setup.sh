@@ -20,6 +20,8 @@ DEFAULT_VENV="ctf"
 UBUNTU_RELEASE="$(lsb_release -cs)"
 USER="$(whoami)"
 
+CLEANUP_ARRAY=()
+
 # Setup
 mkdir -p "${INSTALL_DIR}"
 cd "${INSTALL_DIR}"
@@ -40,6 +42,7 @@ do
         sed -e "s&__SCRIPTS_DIR__&${SCRIPTS_DIR}&g" | \
         sed -e "s&__DEFAULT_VENV__&${DEFAULT_VENV}&g" | \
         sed -e "s&__USER__&${USER}&g" > "${REPO_CONFIG_DIR}/${f%.*}"
+        CLEANUP_ARRAY+="${REPO_CONFIG_DIR}/${f%.*}"
     fi
 done
 
@@ -50,6 +53,7 @@ sudo dpkg --add-architecture i386
 
 # Install packages (if using an 'older' version of Ubuntu modify
 # Neovim packages accordingly https://github.com/neovim/neovim/wiki/Installing-Neovim)
+EXPORT DEBIAN_FRONTEND=noninteractive # for postfix, wtf sagemath
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y \
@@ -93,7 +97,7 @@ sudo apt-add-repository -y \
 sudo apt-get update
 sudo apt-get install -y \
     docker-ce
-sudo apt-get install --install-recommends winehq-staging
+sudo apt-get install --install-recommends -y winehq-staging
 
 # RVM/Ruby install
 gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
@@ -128,7 +132,7 @@ gem install one_gadget
 cd "${CLONE_DIR}"
 git clone https://github.com/pwndbg/pwndbg
 cd pwndbg
-sudo ./setup.sh
+./setup.sh
 
 # pwngdb
 cd "${CLONE_DIR}"
@@ -156,7 +160,12 @@ sudo make install
 # fzf
 cd "${REPO_DIR}"
 git clone https://github.com/junegunn/fzf
-./fzf/install
+./fzf/install --key-bindings --completion --update-rc
+
+# vim-plug
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 
 ###### PERSONAL CONFIGS ######
 
@@ -176,7 +185,16 @@ vi -c ":PlugInstall | :qa!"
 sudo chsh -s $(which zsh)
 rm ~/.zshrc # annoying
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sed '/\s*env\s\s*zsh\s*/d' | sed "s/chsh -s/#chsh -s/")
 
-curl -L git.io/antigen > antigen.zsh
+curl -L git.io/antigen > ~/.config/antigen.zsh
 cp "${REPO_CONFIG_DIR}/.zshrc" ~/.zshrc
+
+
+###### CLEANUP ######
+
+# Delete temp files
+for f in "$CLEANUP_ARRAY[@]"
+do
+    rm -f "$f"
+done
