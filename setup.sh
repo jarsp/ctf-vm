@@ -32,7 +32,7 @@ for f in $(ls -a "${REPO_CONFIG_DIR}")
 do
     if [ "$f" != "." -a "$f" != ".." ]
     then
-        sed -e "s&__INSTALL__DIR__&${INSTALL_DIR}&g" "$f" | \
+        sed -e "s&__INSTALL__DIR__&${INSTALL_DIR}&g" "${REPO_CONFIG_DIR}/$f" | \
         sed -e "s&__REPO__DIR__&${REPO_DIR}&g" | \
         sed -e "s&__REPO_CONFIG_DIR__&${REPO_CONFIG_DIR}&g" | \
         sed -e "s&__VENV_DIR__&${VENV_DIR}&g" | \
@@ -51,6 +51,7 @@ sudo dpkg --add-architecture i386
 # Install packages (if using an 'older' version of Ubuntu modify
 # Neovim packages accordingly https://github.com/neovim/neovim/wiki/Installing-Neovim)
 sudo apt-get update
+sudo apt-get upgrade -y
 sudo apt-get install -y \
     apt-transport-https \
     build-essential \
