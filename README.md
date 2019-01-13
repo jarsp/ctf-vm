@@ -11,7 +11,9 @@ Tested on:
 
 ## Install List
 
-The following items are installed, listed with their dependencies (that are found in the file):
+A bunch of helper scripts are installed to INSTALL\_DIR/scripts.
+
+Additionally the following items are installed, listed with their dependencies (that are found in the file):
 
 ### Critical
 - build-essential 
