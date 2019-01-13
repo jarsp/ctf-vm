@@ -5,6 +5,7 @@ import re
 
 # change if needed
 TERM_EMULATOR_RUN='st'
+GDB_PATH='__CLONE_DIR__/gdb-build/bin/gdb'
 
 # run program in docker
 # env should be shell escaped?
@@ -37,7 +38,7 @@ def make_gdb_attach_d(cont, info):
         subprocess.Popen(['docker', 'exec', cont,
                           'gdbserver', '--once', '--attach', ':2345', str(info['pid'])],
                          stdin=FNULL, stdout=FNULL, stderr=FNULL)
-        subprocess.Popen(TERM_EMULATOR_RUN.split() + ['gdb', '-ex', 'target remote :2345'])
+        subprocess.Popen(TERM_EMULATOR_RUN.split() + [GDB_PATH, '-ex', 'target remote :2345'])
     return f
 
 # post-exploit cleanup, kill running program

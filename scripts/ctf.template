@@ -45,7 +45,7 @@ then
         echo "Usage: $0 clean IMAGE_NAME [INSTANCE_NAME]" 
         exit 1
     fi
-    docker rm -f "$3"
+    docker rm -f "${3:-$2}"
     docker rmi "$2"
 else
     echo "Usage: $0 (init|make|up|sh|down|clean)"
