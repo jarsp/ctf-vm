@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ASLR_FILE=/proc/sys/kernel/randomize_va_space
+curr=$(cat $ASLR_FILE)
+if [ "$curr" = "2" ]
+then
+    echo 0 | sudo tee $ASLR_FILE
+    echo "ASLR off"
+else
+    echo 2 | sudo tee $ASLR_FILE
+    echo "ASLR on"
+fi

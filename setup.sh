@@ -1,6 +1,8 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]
+set -x
+
+if [[ "$#" -ne 1 ]]
 then
     echo "Usage: $0 INSTALL_DIR"
     exit 1
@@ -13,6 +15,7 @@ REPO_DIR="$(dirname $0)"
 REPO_DIR="$(cd ${REPO_DIR} && pwd)"
 
 REPO_CONFIG_DIR="${REPO_DIR}/configs"
+REPO_SCRIPTS_DIR="${REPO_DIR}/scripts"
 
 VENV_DIR="${INSTALL_DIR}/venvs"
 CLONE_DIR="${INSTALL_DIR}/repos"
@@ -39,6 +42,7 @@ do
         sed -e "s&__INSTALL_DIR__&${INSTALL_DIR}&g" \
             -e "s&__REPO__DIR__&${REPO_DIR}&g" \
             -e "s&__REPO_CONFIG_DIR__&${REPO_CONFIG_DIR}&g" \
+            -e "s&__REPO_SCRIPTS_DIR__&${REPO_SCRIPTS_DIR}&g" \
             -e "s&__VENV_DIR__&${VENV_DIR}&g" \
             -e "s&__CLONE_DIR__&${CLONE_DIR}&g" \
             -e "s&__SCRIPTS_DIR__&${SCRIPTS_DIR}&g" \
@@ -48,6 +52,9 @@ do
     fi
 done
 
+# Copy scripts
+mkdir -p "${SCRIPTS_DIR}"
+cp -r "${REPO_SCRIPTS_DIR}/*" "${SCRIPTS_DIR}/"
 
 ###### PACKAGE INSTALLATION ######
 

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]
+then
+  echo "usage: exinitrd imagename.cpio.gz directory"
+  exit 1
+fi
+
+echo "extracting $1 into $2"
+mkdir -p "$2"
+gzip -dc "$1" > "$2/$1.cpio"
+cd "$2"
+cpio -i -d -H newc -F "$1.cpio" --no-absolute-filenames
+rm "$1.cpio"

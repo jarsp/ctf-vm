@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ "$1" = "up" ]]
+then
+    nmcli c up c73141cd-806f-3144-9cf2-86837a896405
+elif [[ "$1" = "down" ]]
+then
+    nmcli c down c73141cd-806f-3144-9cf2-86837a896405
+fi
