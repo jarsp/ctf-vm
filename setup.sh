@@ -154,6 +154,7 @@ cd binutils-gdb
 ./configure --prefix="${CLONE_DIR}/gdb-build/" --with-python="${VENV_DIR}/gdb-python/bin/"
 make
 make install
+deactivate
 
 # one_gadget (have had issues installing after pwndbg, leave in front)
 source ~/.rvm/scripts/rvm
@@ -163,7 +164,8 @@ gem install one_gadget
 cd "${CLONE_DIR}"
 git clone https://github.com/pwndbg/pwndbg
 cd pwndbg
-./setup.sh
+# there should only be one thing in this glob
+pip install --target "${CLONE_DIR}"/gdb-python/python3*/site-packages -Ur requirements.txt
 
 # pwngdb
 cd "${CLONE_DIR}"
