@@ -22,7 +22,6 @@ source "__VENV_DIR__/__DEFAULT_VENV__/bin/activate"
 
 [ -f /home/__USER__/.fzf.zsh ] && source /home/__USER__/.fzf.zsh
 
-alias docker="sudo docker"
 alias gdb="__CLONE_DIR__/gdb-build/bin/gdb"
 alias ida="wine /home/__USER__/.wine/drive_c/Program\\ Files/IDA\\ 7.0/ida64.exe"
 alias ida32="wine /home/__USER__/.wine/drive_c/Program\\ Files/IDA\\ 7.0/ida.exe"

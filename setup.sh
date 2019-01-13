@@ -121,6 +121,10 @@ sudo apt-get install -y \
     docker-ce
 sudo apt-get install --install-recommends -y winehq-staging
 
+# Run docker as user
+sudo groupadd docker
+sudo usermod -aG docker "${USER}"
+
 # Wine PPA is has some key problem so I hope this works lol
 sudo apt-get install -y wine-development
 
