@@ -1,8 +1,8 @@
-# Lines configured by zsh-newuser-install
 HISTFILE=/home/__USER__/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-# End of lines configured by zsh-newuser-install
+
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 source /home/__USER__/.config/antigen.zsh
 
@@ -31,5 +31,4 @@ alias sage="__VENV=\"${VIRTUAL_ENV}\";deactivate;sage;source \"${__VENV}/bin/act
 # Fix backspace for st
 tput smkx
 
-export VIRTUAL_ENV_DISABLE_PROMPT=1
 export PATH="$PATH:$HOME/.rvm/bin:__SCRIPTS_DIR__"
