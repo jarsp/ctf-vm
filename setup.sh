@@ -52,6 +52,7 @@ done
 # Copy scripts
 mkdir -p "${SCRIPTS_DIR}"
 cp -r "${REPO_SCRIPTS_DIR}"/* "${SCRIPTS_DIR}/"
+find "${SCRIPTS_DIR}" -name '*.template' -type f | xargs rm -f
 
 ###### PACKAGE INSTALLATION ######
 
