@@ -1,0 +1,53 @@
+#!/bin/bash
+
+if [[ "$1" = "init" ]]
+then
+    cp -r "__SCRIPTS_DIR__"/pwnfiles/* .
+elif [[ "$1" = "make" ]]
+then
+    if [[ "$#" -ne "2" ]]
+    then
+        echo "Usage: $0 make IMAGE_NAME"
+        exit 1
+    fi
+    docker build -t "$2" .
+elif [[ "$1" = "up" ]]
+then
+    if [[ "$#" -ne "2" ]] && [[ "$#" -ne "3" ]]
+    then
+        echo "Usage: $0 up IMAGE_NAME [INSTANCE_NAME]"
+        exit 1
+    fi
+    # For x-forwarding, add:
+    # -e DISPLAY=$DISPLAY -v $/tmp/.X11-unix:/tmp/.X11-unix
+    # and run xhost +
+    docker run --rm -v "$(pwd)":/tmp/mnt --privileged -p 2345:2345/tcp --name "$2" -d "${3:-$2}"
+elif [[ "$1" = "sh" ]]
+then
+    if [[ "$#" -ne "2" ]]
+    then
+        echo "Usage: $0 sh INSTANCE_NAME"
+        exit 1
+    fi
+    docker exec -it "$2" /bin/bash
+elif [[ "$1" = "down" ]]
+then
+    if [[ "$#" -ne "2" ]]
+    then
+        echo "Usage: $0 down INSTANCE_NAME"
+        exit 1
+    fi
+    docker rm -f "$2"
+elif [[ "$1" = "clean" ]]
+then
+    if [[ "$#" -ne "2" ]] && [[ "$#" -ne "3" ]]
+    then
+        echo "Usage: $0 clean IMAGE_NAME [INSTANCE_NAME]" 
+        exit 1
+    fi
+    docker rm -f "$3"
+    docker rmi "$2"
+else
+    echo "Usage: $0 (init|make|up|sh|down|clean)"
+    exit 1
+fi

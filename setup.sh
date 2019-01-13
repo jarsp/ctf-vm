@@ -35,21 +35,18 @@ mkdir -p "${VENV_DIR}"
 mkdir -p "${CLONE_DIR}"
 
 # Fill in templates
-for f in $(ls -a "${REPO_CONFIG_DIR}")
+for f in $(find "${REPO_DIR}" -name '*.template' -type f)
 do
-    if [ "$f" != "." -a "$f" != ".." ]
-    then
-        sed -e "s&__INSTALL_DIR__&${INSTALL_DIR}&g" \
-            -e "s&__REPO__DIR__&${REPO_DIR}&g" \
-            -e "s&__REPO_CONFIG_DIR__&${REPO_CONFIG_DIR}&g" \
-            -e "s&__REPO_SCRIPTS_DIR__&${REPO_SCRIPTS_DIR}&g" \
-            -e "s&__VENV_DIR__&${VENV_DIR}&g" \
-            -e "s&__CLONE_DIR__&${CLONE_DIR}&g" \
-            -e "s&__SCRIPTS_DIR__&${SCRIPTS_DIR}&g" \
-            -e "s&__DEFAULT_VENV__&${DEFAULT_VENV}&g" \
-            -e "s&__USER__&${USER}&g" "${REPO_CONFIG_DIR}/$f" > "${REPO_CONFIG_DIR}/${f%.*}"
-        CLEANUP_ARRAY+=("${REPO_CONFIG_DIR}/${f%.*}")
-    fi
+    sed -e "s&__INSTALL_DIR__&${INSTALL_DIR}&g" \
+        -e "s&__REPO__DIR__&${REPO_DIR}&g" \
+        -e "s&__REPO_CONFIG_DIR__&${REPO_CONFIG_DIR}&g" \
+        -e "s&__REPO_SCRIPTS_DIR__&${REPO_SCRIPTS_DIR}&g" \
+        -e "s&__VENV_DIR__&${VENV_DIR}&g" \
+        -e "s&__CLONE_DIR__&${CLONE_DIR}&g" \
+        -e "s&__SCRIPTS_DIR__&${SCRIPTS_DIR}&g" \
+        -e "s&__DEFAULT_VENV__&${DEFAULT_VENV}&g" \
+        -e "s&__USER__&${USER}&g" "${REPO_CONFIG_DIR}/$f" > "${REPO_CONFIG_DIR}/${f%.*}"
+    CLEANUP_ARRAY+=("${REPO_CONFIG_DIR}/${f%.*}")
 done
 
 # Copy scripts
