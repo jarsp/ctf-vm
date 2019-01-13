@@ -132,9 +132,9 @@ curl -sSL https://get.rvm.io | bash -s stable --rails
 ###### PYTHON(2) VENV SETUP ######
 
 # Venv creation
-cd ${INSTALL_DIR}
-virtualenv -p $(which python) venvs/ctf
-source venvs/ctf/bin/activate
+cd "${INSTALL_DIR}"
+virtualenv -p $(which python) "venvs/${DEFAULT_VENV}"
+source "venvs/${DEFAULT_VENV}/bin/activate"
 
 # Packages 
 pip install \
@@ -149,30 +149,30 @@ pip install \
 
 ###### OTHER INSTALLS ######
 
+# one_gadget (have had issues installing after pwndbg, leave in front)
+source ~/.rvm/scripts/rvm
+gem install one_gadget
+
 # GDB rebuild (cause distro python is so broken)
 # Technically I can hack around it but this is cleaner
+deactivate
 cd "${VENV_DIR}"
-virtualenv -p $(which python3) gdb-python
+virtualenv -p "$(which python3)" gdb-python
 source "${VENV_DIR}/gdb-python/bin/activate"
 cd "${CLONE_DIR}"
-git clone https://git.sourceware.org/git/binutils-gdb.git
+git clone git://sourceware.org/git/binutils-gdb.git
 mkdir -p gdb-build
 cd binutils-gdb
 ./configure --prefix="${CLONE_DIR}/gdb-build/" --with-python="${VENV_DIR}/gdb-python/bin/"
 make
 make install
-deactivate
-
-# one_gadget (have had issues installing after pwndbg, leave in front)
-source ~/.rvm/scripts/rvm
-gem install one_gadget
 
 # pwndbg
 cd "${CLONE_DIR}"
 git clone https://github.com/pwndbg/pwndbg
 cd pwndbg
-# there should only be one thing in this glob
-pip install --target "${CLONE_DIR}"/gdb-python/python3*/site-packages -Ur requirements.txt
+# install required packages to python3 venv
+pip install -Ur requirements.txt
 
 # pwngdb
 cd "${CLONE_DIR}"
@@ -180,6 +180,8 @@ git clone https://github.com/scwuaptx/Pwngdb.git
 
 # Make pwndbg and pwngdb play nice
 cp "${REPO_CONFIG_DIR}/.gdbinit" ~/.gdbinit
+deactivate
+source "${VENV_DIR}/${DEFAULT_VENV}/bin/activate"
 
 # radare2
 cd "${CLONE_DIR}"
@@ -188,7 +190,7 @@ cd radare2
 sys/install.sh
 
 # r2 config
-cp ${REPO_CONFIG_DIR}/.radare2rc ~/.radare2rc
+cp "${REPO_CONFIG_DIR}/.radare2rc" ~/.radare2rc
 
 ###### PERSONAL PREFS ######
 
