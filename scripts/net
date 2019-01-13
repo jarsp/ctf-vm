@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# This is assuming that your VM internet 'Wired Connection 1' by default
+conn="${2:-Wired connection 1}"
+
 if [[ "$1" = "up" ]]
 then
-    nmcli c up c73141cd-806f-3144-9cf2-86837a896405
+    nmcli c up "${conn}"
 elif [[ "$1" = "down" ]]
 then
-    nmcli c down c73141cd-806f-3144-9cf2-86837a896405
+    nmcli c down "${conn}"
 fi
