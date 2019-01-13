@@ -65,6 +65,7 @@ done
 mkdir -p "${SCRIPTS_DIR}"
 cp -r "${REPO_SCRIPTS_DIR}"/* "${SCRIPTS_DIR}/"
 find "${SCRIPTS_DIR}" -name '*.template' -type f | xargs rm -f
+chmod a+x "${SCRIPTS_DIR}"/*
 
 ###### PACKAGE INSTALLATION ######
 
