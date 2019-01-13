@@ -59,8 +59,7 @@ export DEBIAN_FRONTEND=noninteractive
 sudo debconf-set-selections <<< "postfix postfix/mailname string ubuntu"
 sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 
-# Install packages (if using an 'older' version of Ubuntu modify
-# Neovim packages accordingly https://github.com/neovim/neovim/wiki/Installing-Neovim)
+# Install packages
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y \
