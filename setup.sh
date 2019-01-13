@@ -44,9 +44,10 @@ do
             -e "s&__SCRIPTS_DIR__&${SCRIPTS_DIR}&g" \
             -e "s&__DEFAULT_VENV__&${DEFAULT_VENV}&g" \
             -e "s&__USER__&${USER}&g" "${REPO_CONFIG_DIR}/$f" > "${REPO_CONFIG_DIR}/${f%.*}"
-        CLEANUP_ARRAY+="${REPO_CONFIG_DIR}/${f%.*}"
+        CLEANUP_ARRAY+=("${REPO_CONFIG_DIR}/${f%.*}")
     fi
 done
+
 
 ###### PACKAGE INSTALLATION ######
 
@@ -263,10 +264,11 @@ cp "${REPO_CONFIG_DIR}/.zshrc" ~/.zshrc
 ###### CLEANUP ######
 
 # Delete temp files
-for f in "$CLEANUP_ARRAY[@]"
+for f in "${CLEANUP_ARRAY[@]}"
 do
     rm -f "$f"
 done
 
-echo "System is going for reboot in 1 minute!"
-sudo shutdown -r +1
+echo "System is going for reboot in 30 seconds!"
+sleep 30
+sudo shutdown -r now
