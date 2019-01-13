@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Prevent sudo timeout
+# https://serverfault.com/questions/266039/temporarily-increasing-sudos-timeout-for-the-duration-of-an-install-script
+sudo -v # ask for sudo password up-front
+while true; do
+  # Update user's timestamp without running a command
+  sudo -nv; sleep 1m
+  # Exit when the parent process is not running any more. In fact this loop
+  # would be killed anyway after being an orphan(when the parent process
+  # exits). But this ensures that and probably exit sooner.
+  kill -0 $$ 2>/dev/null || exit
+done &
+
 set -x
 
 if [[ "$#" -ne 1 ]]
@@ -279,6 +291,6 @@ do
     rm -f "$f"
 done
 
-echo "System is going for reboot in 30 seconds!"
-sleep 30
+echo "Install complete. The system needs to be rebooted."
+read -p "Press enter to continue."
 sudo shutdown -r now
