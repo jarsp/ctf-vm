@@ -122,7 +122,7 @@ sudo apt-get install -y \
 sudo apt-get install --install-recommends -y winehq-staging
 
 # Run docker as user
-sudo groupadd docker
+sudo groupadd -f docker
 sudo usermod -aG docker "${USER}"
 
 # Wine PPA is has some key problem so I hope this works lol
