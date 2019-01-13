@@ -64,15 +64,19 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y \
     apt-transport-https \
+    bison \
     build-essential \
     ca-certificates \
     curl \
+    flex \
+    expat \
     git \
     gnupg2 \
     libc6-i386 \
     libmpfr-dev \
     libmpc-dev \
     libvirt-bin \
+    m4 \
     python \
     python-dev \
     python-pip \
@@ -83,6 +87,7 @@ sudo apt-get install -y \
     qemu-kvm \
     sagemath \
     software-properties-common \
+    texinfo \
     virtualenv
 
 # Disable postfix lol
@@ -136,6 +141,19 @@ pip install \
 
 
 ###### OTHER INSTALLS ######
+
+# GDB rebuild (cause distro python is so broken)
+# Technically I can hack around it but this is cleaner
+cd "${VENV_DIR}"
+virtualenv -p $(which python3) gdb-python
+source "${VENV_DIR}/gdb-python/bin/activate"
+cd "${CLONE_DIR}"
+git clone https://git.sourceware.org/git/binutils-gdb.git
+mkdir -p gdb-build
+cd binutils-gdb
+./configure --prefix="${CLONE_DIR}/gdb-build/" --with-python="${VENV_DIR}/gdb-python/bin/"
+make
+make install
 
 # one_gadget (have had issues installing after pwndbg, leave in front)
 source ~/.rvm/scripts/rvm
