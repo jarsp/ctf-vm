@@ -54,7 +54,7 @@ done
 
 # Copy scripts
 mkdir -p "${SCRIPTS_DIR}"
-cp -r "${REPO_SCRIPTS_DIR}/*" "${SCRIPTS_DIR}/"
+cp -r "${REPO_SCRIPTS_DIR}"/* "${SCRIPTS_DIR}/"
 
 ###### PACKAGE INSTALLATION ######
 
