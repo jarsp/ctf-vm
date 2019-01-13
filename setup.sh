@@ -45,8 +45,8 @@ do
         -e "s&__CLONE_DIR__&${CLONE_DIR}&g" \
         -e "s&__SCRIPTS_DIR__&${SCRIPTS_DIR}&g" \
         -e "s&__DEFAULT_VENV__&${DEFAULT_VENV}&g" \
-        -e "s&__USER__&${USER}&g" "${REPO_CONFIG_DIR}/$f" > "${REPO_CONFIG_DIR}/${f%.*}"
-    CLEANUP_ARRAY+=("${REPO_CONFIG_DIR}/${f%.*}")
+        -e "s&__USER__&${USER}&g" "$f" > "${f%.*}"
+    CLEANUP_ARRAY+=("${f%.*}")
 done
 
 # Copy scripts
