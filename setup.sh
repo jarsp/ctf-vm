@@ -211,11 +211,16 @@ sudo apt-get install -y \
     compton \
     dmenu \
     feh \
+    fontconfig \
     ghc \
+    libfontconfig1-dev \
+    libfreetype6-dev \
     libx11-dev \
+    libxt-dev \
     libghc-xmonad-dev \
     libghc-xmonad-contrib-dev \
     neovim \
+    x11proto-core-dev \
     xmobar \
     xmonad \
     zsh
@@ -247,7 +252,7 @@ cd st
 sed -i \
     -e "s/unsigned int alpha = 0xed/unsigned int alpha = 0x80/g" \
     -e "s/282828/000000/g" config.h
-sudo make install
+sudo make clean install
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/st 60
 
 # Vim-plug
