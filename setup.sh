@@ -253,7 +253,8 @@ cd st
 sed -i \
     -e "s/unsigned int alpha = 0xed/unsigned int alpha = 0x80/g" \
     -e "s/282828/000000/g" config.h
-sudo make clean install
+make
+sudo make install
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/st 60
 
 # Vim-plug
