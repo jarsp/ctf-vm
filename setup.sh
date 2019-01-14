@@ -216,10 +216,11 @@ sudo apt-get install -y \
     libfontconfig1-dev \
     libfreetype6-dev \
     libx11-dev \
-    libxt-dev \
+    libxft-dev \
     libghc-xmonad-dev \
     libghc-xmonad-contrib-dev \
     neovim \
+    pkg-config \
     x11proto-core-dev \
     xmobar \
     xmonad \
