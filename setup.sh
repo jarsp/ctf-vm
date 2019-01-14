@@ -122,7 +122,7 @@ sudo add-apt-repository -y \
 # Wine PPA (necessary to avoid bugs with python installer in wine)
 curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
 sudo apt-add-repository -y \
-    "deb https://dl.winehq.org/wine-builds/ubuntu/${UBUNTU_RELEASE} main"
+    "deb https://dl.winehq.org/wine-builds/ubuntu/ ${UBUNTU_RELEASE} main"
 
 # Install PPA stuff
 sudo apt-get update
