@@ -2,7 +2,7 @@
 
 Simple scripts for my ctf setup.
 
-Clone the repo and run with ./setup.sh INSTALL\_DIR inside the VM to install into the given directory as the current user.
+Clone the repo and run with ./setup.sh INSTALL\_DIR inside the VM to install into the given directory as the current user. Please don't use any weird path names/usernames, it might be broken, but I tried.
 
 An Ubuntu VM is required, probably 16.04 at least.
 
@@ -39,7 +39,7 @@ Additionally the following items are installed, listed with their dependencies (
 - sagemath
 - virtualenv
 - qemu: qemu-kvm libvirt-bin
-- wine-development (currently not from ppa, appears to be broken)
+- wine-development (from ppa)
 
 ### Personal
 - compton
@@ -50,7 +50,7 @@ Additionally the following items are installed, listed with their dependencies (
 - neovim: python2/3-dev
     - vim-plug
     - vim-easymotion
-- st
+- st: libx11-dev libxft-dev libfontconfig1-dev pkg-config
     - LukeSmithxyz/st fork
     - Slightly modified theme
 - xmonad: ghc, libx11-dev, libghc-xmonad-dev, libghc-xmonad-contrib-dev
