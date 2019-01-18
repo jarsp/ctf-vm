@@ -38,7 +38,9 @@ def make_gdb_attach_d(cont, info):
         subprocess.Popen(['docker', 'exec', cont,
                           'gdbserver', '--once', '--attach', ':2345', str(info['pid'])],
                          stdin=FNULL, stdout=FNULL, stderr=FNULL)
-        subprocess.Popen(TERM_EMULATOR_RUN.split() + [GDB_PATH, '-ex', 'target remote :2345'])
+        subprocess.Popen(TERM_EMULATOR_RUN.split() + \
+                         [GDB_PATH, '-ex', 'target remote :2345',
+                                    '-ex', 'source gdbinit'])
     return f
 
 # post-exploit cleanup, kill running program
