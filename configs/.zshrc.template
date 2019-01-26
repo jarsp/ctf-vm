@@ -22,7 +22,6 @@ source "__VENV_DIR__/__DEFAULT_VENV__/bin/activate"
 
 [ -f /home/__USER__/.fzf.zsh ] && source /home/__USER__/.fzf.zsh
 
-alias gdb="__CLONE_DIR__/gdb-build/bin/gdb"
 alias ida="wine /home/__USER__/.wine/drive_c/Program\\ Files/IDA\\ 7.0/ida64.exe"
 alias ida32="wine /home/__USER__/.wine/drive_c/Program\\ Files/IDA\\ 7.0/ida.exe"
 alias sage="__VENV=\"${VIRTUAL_ENV}\";deactivate;sage;source \"${__VENV}/bin/activate\""
@@ -30,4 +29,4 @@ alias sage="__VENV=\"${VIRTUAL_ENV}\";deactivate;sage;source \"${__VENV}/bin/act
 # Fix backspace for st
 tput smkx
 
-export PATH="$PATH:$HOME/.rvm/bin:__SCRIPTS_DIR__"
+export PATH="__CLONE_DIR__/gdb-build/bin:$PATH:$HOME/.rvm/bin:__SCRIPTS_DIR__"

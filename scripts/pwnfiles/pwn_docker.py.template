@@ -17,11 +17,10 @@ def process_d(cont, exe, env=None):
     cmd += [cont, exe]
     return process(cmd)
 
-# pre-exploit, fetch program pid for later
-def pre_exploit_d(cont, exe):
+def fetch_pid(ps, exe):
     pid = None
     while pid is None:
-        o = subprocess.check_output(['docker', 'exec', cont, 'ps', '-ax']).split('\n')
+        o = subprocess.check_output(ps + ['-ax']).split('\n')
         for l in o:
             m = re.match('\s*(\d+).*' + exe, l)
             if m is not None:
@@ -30,6 +29,10 @@ def pre_exploit_d(cont, exe):
         else:
             sleep(1)
     return {'pid': pid}
+
+# pre-exploit, fetch program pid for later
+def pre_exploit_d(cont, exe):
+    return fetch_pid(['docker', 'exec', cont, 'ps'], exe)
 
 # gdb.attach replacement
 def make_gdb_attach_d(cont, info):
@@ -46,3 +49,17 @@ def make_gdb_attach_d(cont, info):
 # post-exploit cleanup, kill running program
 def post_exploit_d(cont, info):
     subprocess.call(['docker', 'exec', cont, 'kill', '-9', str(info['pid'])])
+
+# regular gdb.attach replacements because it's broken somehow
+def pre_exploit_r(exe):
+    return fetch_pid(['ps'], exe)
+
+def make_gdb_attach_r(info):
+    def f(r):
+        subprocess.Popen(TERM_EMULATOR_RUN.split() + \
+                         [GDB_PATH, '-q', '--pid={}'.format(info['pid']),
+                                    '-ex', 'source gdbinit'])
+    return f
+
+def post_exploit_r():
+    pass
