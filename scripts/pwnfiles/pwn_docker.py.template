@@ -7,16 +7,6 @@ import re
 TERM_EMULATOR_RUN='st'
 GDB_PATH='__CLONE_DIR__/gdb-build/bin/gdb'
 
-# run program in docker
-# env should be shell escaped?
-def process_d(cont, exe, env=None):
-    cmd = ['docker', 'exec', '-i']
-    if env is not None:
-        for k, v in env.items():
-            cmd += ['-e', '{}={}'.format(k, v)]
-    cmd += [cont, exe]
-    return process(cmd)
-
 def fetch_pid(ps, exe):
     pid = None
     while pid is None:
@@ -30,16 +20,27 @@ def fetch_pid(ps, exe):
             sleep(1)
     return {'pid': pid}
 
+# run program in docker
+# env should be shell escaped?
+def process_d(params):
+    cmd = ['docker', 'exec', '-i']
+    if params['docker_preload'] is not None:
+        for k, v in params['docker_preload'].items():
+            cmd += ['-e', '{}={}'.format(k, v)]
+    cmd += [params['cont'], params['docker_exe']]
+    return process(cmd)
+
 # pre-exploit, fetch program pid for later
-def pre_exploit_d(cont, exe):
-    return fetch_pid(['docker', 'exec', cont, 'ps'], exe)
+def pre_exploit_d(params):
+    params['info'] = fetch_pid(['docker', 'exec', params['cont'], 'ps'], params['docker_exe'])
 
 # gdb.attach replacement
-def make_gdb_attach_d(cont, info):
+def make_gdb_attach_d(params):
     def f(r):
         FNULL = open('/dev/null', 'w+')
-        subprocess.Popen(['docker', 'exec', cont,
-                          'gdbserver', '--once', '--attach', ':2345', str(info['pid'])],
+        subprocess.Popen(['docker', 'exec', params['cont'],
+                          'gdbserver', '--once', '--attach', ':2345',
+                          str(params['info']['pid'])],
                          stdin=FNULL, stdout=FNULL, stderr=FNULL)
         subprocess.Popen(TERM_EMULATOR_RUN.split() + \
                          [GDB_PATH, '-ex', 'target remote :2345',
@@ -47,19 +48,74 @@ def make_gdb_attach_d(cont, info):
     return f
 
 # post-exploit cleanup, kill running program
-def post_exploit_d(cont, info):
-    subprocess.call(['docker', 'exec', cont, 'kill', '-9', str(info['pid'])])
+def post_exploit_d(params):
+    subprocess.call(['docker', 'exec', params['cont'], 'kill', '-9',
+                     str(params['info']['pid'])])
 
-# regular gdb.attach replacements because it's broken somehow
-def pre_exploit_r(exe):
-    return fetch_pid(['ps'], exe)
 
-def make_gdb_attach_r(info):
+# local wrappers, gdb.attach is broken somehow
+def process_l(params):
+    return process(params['exe'], env=params['preload'])
+
+def pre_exploit_l(params):
+    params['info'] = fetch_pid(['ps'], params['exe'])
+
+def make_gdb_attach_l(params):
     def f(r):
         subprocess.Popen(TERM_EMULATOR_RUN.split() + \
-                         [GDB_PATH, '-q', '--pid={}'.format(info['pid']),
+                         [GDB_PATH, '-q', '--pid={}'.format(params['info']['pid']),
                                     '-ex', 'source gdbinit'])
     return f
 
-def post_exploit_r():
+def post_exploit_l(params):
     pass
+
+
+# remote wrappers
+def process_r(params):
+    return remote(params['host'], params['port'])
+
+def pre_exploit_r(params):
+    pass
+
+def make_gdb_attach_r(params):
+    return None
+
+def post_exploit_r(params):
+    pass
+
+
+# exploit wrappers
+def make_run(params, actions):
+    def r_():
+        r = actions['proc'](params)
+        actions['pre'](params)
+        gdb_attach = actions['make_gdb'](params)
+        return r, gdb_attach
+    return r_
+
+def run_exploit(params, exploit):
+    actions = {'remote':
+                {'proc': process_r,
+                 'pre': pre_exploit_r,
+                 'make_gdb': make_gdb_attach_r,
+                 'post': post_exploit_r},
+               'docker':
+                {'proc': process_d,
+                 'pre': pre_exploit_d,
+                 'make_gdb': make_gdb_attach_d,
+                 'post': post_exploit_d},
+               'local':
+               {'proc': process_l,
+                 'pre': pre_exploit_l,
+                 'make_gdb': make_gdb_attach_l,
+                 'post': post_exploit_l},
+              }
+
+    act = actions[params['type']]
+    r_ = make_run(params, act)
+
+    try:
+        exploit(r_)
+    finally:
+        act['post'](params)
