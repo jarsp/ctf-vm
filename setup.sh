@@ -119,6 +119,15 @@ sudo add-apt-repository -y \
    ${UBUNTU_RELEASE}\
    stable"
 
+# New wine also requires new FAudio (https://forum.winehq.org/viewtopic.php?f=8&t=32192)
+VER=$(lsb_release -a 2>/dev/null | grep Description | cut -d ' ' -f 2)
+VER=${VER%.*}
+curl -fsSL "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_${VER}/Release.key" | sudo apt-key add -
+sudo apt-add-repository -y \
+    "deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_${VER} ./"
+sudo apt update
+sudo apt install -y libfaudio0 libfaudio-dev
+
 # Wine PPA (necessary to avoid bugs with python installer in wine)
 curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
 sudo apt-add-repository -y \
