@@ -260,7 +260,7 @@ cd "${CLONE_DIR}"
 git clone https://github.com/LukeSmithxyz/st
 cd st
 sed -i \
-    -e "s/unsigned int alpha = 0xed/unsigned int alpha = 0x80/g" \
+    -e "s/float alpha = .*/float alpha = 0.50;/g" \
     -e "s/282828/000000/g" config.h
 make
 sudo make install
